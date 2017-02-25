@@ -41,12 +41,16 @@ function createNewEbayItemsDoc() {
   var body = oldData.join("\n") + messageBodies.join("\n");
   var newItemsFile = DriveApp.createFile(newItemsFileName, body, "text/html");
     
+  trashMessages(threads, label);
+  
+  sendAlertEmail(newItemsFile);
+}
+
+function trashMessages(threads, label) {
   // remove lanels from messages and move to trash
   for (var i = 0; i < threads.length; ++i) {
     threads[i].removeLabel(label).moveToTrash();
   }
-  
-  sendAlertEmail(newItemsFile);
 }
 
 function sendAlertEmail(newItemsFile) {
