@@ -11,6 +11,16 @@ function createNewEbayItemsDoc() {
     return;
   }
   
+  var messageBodies = getMessageBodies(threads);
+  var oldData = getExistingFileData();
+  var newItemsFile = createFile(oldData, messageBodies);
+  
+  trashMessages(threads, label);
+  
+  sendAlertEmail(newItemsFile);
+}
+
+function getMessageBodies(threads) {
   var messageBodies = [];
   
   // collate all new item message bodies
@@ -22,15 +32,7 @@ function createNewEbayItemsDoc() {
     }
   }
   
-  var oldData = getExistingFileData();
-  
-  // combine existing and new messages and write to html file
-  var body = oldData.join("\n") + messageBodies.join("\n");
-  var newItemsFile = DriveApp.createFile(newItemsFileName, body, "text/html");
-    
-  trashMessages(threads, label);
-  
-  sendAlertEmail(newItemsFile);
+  return messageBodies;
 }
 
 function getExistingFileData() {
@@ -50,6 +52,13 @@ function getExistingFileData() {
   }
   
   return oldData;
+}
+
+function createFile(oldData, messageBodies) {
+  // combine existing and new messages and write to html file
+  var body = oldData.join("\n") + messageBodies.join("\n");
+  var newItemsFile = DriveApp.createFile(newItemsFileName, body, "text/html");
+  return newItemsFile;
 }
 
 function trashMessages(threads, label) {
