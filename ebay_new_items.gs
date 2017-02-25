@@ -46,7 +46,10 @@ function createNewEbayItemsDoc() {
     threads[i].removeLabel(label).moveToTrash();
   }
   
-  // send alert email
+  sendAlertEmail(newItemsFile);
+}
+
+function sendAlertEmail(newItemsFile) {
   var notificationRecipient = Session.getActiveUser().getEmail();
   var notificationSubject = "New Ebay Items Notification (" + (new Date()) + ")";
   var notificationBody = "";
